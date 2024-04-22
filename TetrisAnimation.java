@@ -54,7 +54,7 @@ private ArrayList<Integer> queue;
 // private File TetrisTheme = new File("Tetris.wav");
 private ImageIcon tetrisLogo;
 private int seconds = 0;
-private int maxseconds = 30;
+private int maxseconds = 120;
 private boolean timeGameOver = false;
 
 private int highscore = 0;
@@ -73,6 +73,7 @@ private GeneticAgent[] bots = new GeneticAgent[population];
 private double[] botScores = new double[population];
 private int generation = 1;
 private int currentBotIndex;
+private boolean toggleAI = true;
 
 // For all TETRIS nerds out there... I have realized there is more to TETRIS than I could have ever preconceived...
 // Nevertheless, fanservice is here with all its nerdy jargon to describe THIS particular version of TETRIS because there's a baijgiegjaerjiegjgillion of different variations
@@ -158,16 +159,17 @@ private int currentBotIndex;
 		addKeyListener(new Keyboard());
 		setFocusable(true);
 
+		if(toggleAI) {
+			maxseconds = 30;
+			// WHERE AI SHIT BEGINS
+			holdBlock();
 
-
-		// WHERE AI SHIT BEGINS
-		holdBlock();
-
-		// Instantiating all the bots for the first gen
-		for(int i=0; i<bots.length; i++) {
-			bots[i] = new GeneticAgent(tetris);
+			// Instantiating all the bots for the first gen
+			for(int i=0; i<bots.length; i++) {
+				bots[i] = new GeneticAgent(tetris);
+			}
+			currentBotIndex = 0;
 		}
-		currentBotIndex = 0;
 	}
 	
 	// KeyboardListener class that is called when keys are pressed
@@ -600,11 +602,13 @@ private int currentBotIndex;
 
 
 		// AI TEXT
-		g.setColor(Color.WHITE);
-		g.setFont(new Font("Dialog", Font.BOLD, 20));
-		g.drawString("Gen: "+generation, 15, 400);
-		g.drawString("Bot: "+(currentBotIndex+1), 15, 435);
-		g.drawString("Pop: "+population, 15, 470);
+		if(toggleAI) {
+			g.setColor(Color.WHITE);
+			g.setFont(new Font("Dialog", Font.BOLD, 20));
+			g.drawString("Gen: "+generation, 15, 400);
+			g.drawString("Bot: "+(currentBotIndex+1), 15, 435);
+			g.drawString("Pop: "+population, 15, 470);
+		}
 	}
 	
 	// PlaySound Method
